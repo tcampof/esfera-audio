@@ -30,9 +30,15 @@ Prefer the bundled OpenSpec skills for mechanics (`openspec-propose`, `openspec-
 
 Only after verify. If deltas exist, archive/sync so `openspec/specs/` stays the source of truth. Update `docs/backlog-map.md` if mappings changed.
 
-## Commit
+## Commit + PR
 
-After apply + verify for a change (and after archive if applicable), **create a git commit** for that change alone. Harness rule: one finished delivery → one commit. No push unless the user asks.
+After apply + verify for a change (and after archive if applicable):
+
+1. **Commit** on a branch named like `feature/f2-catalog-pdp-search` or `feature/AB-23-catalog`.
+2. **Open a PR** to `Main` with Azure links (`AB#15`, `AB#23`, …) in title/body.
+3. Mark related Azure US/Feature Closed when the PR is ready/merged per team habit.
+
+Harness: finished US/Feature → git PR + Azure, not only a local commit.
 
 ## Validate
 

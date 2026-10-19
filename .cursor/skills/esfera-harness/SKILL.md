@@ -38,8 +38,10 @@ When a change, Feature/US deliverable, or harness doc milestone is **done**:
 
 1. `npm run typecheck` && `npm run test` (if app code touched).
 2. Run `esfera-verify-ac` evidence when closing an OpenSpec change.
-3. **Create a git commit** for that unit of work (do not batch multiple finished deliveries).
-4. Do **not** `git push` unless the user explicitly asks.
+3. **Commit** on a feature branch (one delivery unit).
+4. **Push branch + open PR** to `Main`, linking Azure with `AB#<id>` in title/body.
+5. Update Azure work item state (Closed) when the delivery is accepted/merged.
+6. Do **not** push straight to `Main` unless the user explicitly asks.
 
 ## Hard stops
 

@@ -37,6 +37,12 @@ Trabajar con los **3 pilares**: Herramienta/harness · Contexto · Prompt.
 2. **UX Premium:** Interfaz oscura/elegante Hi-Fi.
 3. **Formularios:** Presupuesto / Cita con Zod o validación explícita.
 4. **Guardrail:** Antes de cerrar tarea → `npm run typecheck` y `npm run test`.
-5. **Commit al cerrar:** Al terminar un change, una Feature/US entregable o un hito de harness (specs/skills/PRD), **crear commit git** en el repo. No acumular varias entregas sin commit. Mensaje en estilo del repo (qué/por qué); no push salvo que el usuario lo pida.
+5. **Commit + PR al cerrar:** Al terminar un change / Feature / User Story entregable:
+   1. **Commit** en una rama de trabajo (no acumular varias entregas en un solo commit si son US distintas, salvo acuerdo explícito).
+   2. **Push** de la rama y **abrir Pull Request** hacia `Main`.
+   3. En título/cuerpo del PR enlazar Azure Boards con `AB#<id>` (Feature y/o US), p. ej. `AB#23 AB#24`.
+   4. Tras merge (o al cerrar la US), actualizar estado en Azure (Closed/Done).
+   - No dar por cerrada una US solo con commit local: debe quedar amarrada a **git (PR)** + **Azure**.
+   - No push a `Main` directo salvo excepción pedida por el usuario.
 6. **Fuente de verdad:** PRD §3.4 + `openspec/specs/`. No inventar checkout, Imagen ni auth en MVP.
 7. **OpenSpec first:** no implementar features de negocio sin spec (o change con `skip_specs` justificado solo para tooling puro).

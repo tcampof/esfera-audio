@@ -22,4 +22,11 @@ Ruta: `.cursor/skills/<name>/SKILL.md`
 
 ## Cierre de entrega
 
-Al terminar un change, Feature/US o hito de harness: **verify → commit git**. No acumular varias entregas sin commit. Push solo si el usuario lo pide (`AGENTS.md` §3).
+Al terminar un change, Feature o **User Story**:
+
+1. **verify** (`typecheck` / `test` / escenarios)
+2. **commit** en rama de feature
+3. **PR** a `Main` con `AB#<id>` (amarra git ↔ Azure Boards)
+4. **Azure** → estado Closed
+
+No cerrar US solo con commit local. No push directo a `Main` salvo excepción (`AGENTS.md` §3).

@@ -51,7 +51,7 @@ operations:
       - "Seguir tasks.md en orden; no inventar features fuera del change"
       - "Tras implementar: typecheck + test; contrastar escenarios de la spec"
       - "No añadir checkout, Imagen ni auth en el MVP"
-      - "Al cerrar el change: crear commit git de esa entrega (harness); no push salvo petición del usuario"
+      - "Al cerrar el change/US: commit en rama + PR a Main con AB#ids (git↔Azure); no push directo a Main salvo petición del usuario"
   archive:
     guidance:
       - "Confirmar que los escenarios ADDED quedaron cubiertos"

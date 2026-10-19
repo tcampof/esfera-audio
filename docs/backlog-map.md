@@ -16,6 +16,7 @@
 
 1. Leer spec(s) de la capability.
 2. Crear/usar change OpenSpec (`/opsx-propose` o carpeta en `changes/`).
-3. Completar `tasks.md` → `/opsx-apply`.
+3. Completar `tasks.md` → `/opsx-apply` (rama `feature/...`).
 4. Verificar escenarios + `typecheck`/`test`.
-5. `/opsx-archive` si hubo deltas; actualizar este mapa si cambia el enlace.
+5. **Commit + PR** a `Main` con `AB#<Feature>` / `AB#<US>` → cerrar ítems en Azure.
+6. `/opsx-archive` si hubo deltas; actualizar este mapa si cambia el enlace.

@@ -50,10 +50,12 @@ Verify:
 ### Comandos
 - typecheck: …
 - test: …
-### Git
-- [ ] Commit creado para esta entrega (obligatorio en harness)
+### Git + Azure
+- [ ] Commit en rama de feature
+- [ ] PR a `Main` con `AB#<id>` (US/Feature)
+- [ ] Azure actualizado (Closed) al cerrar la entrega
 ```
 
 ## After PASS
 
-Create the git commit for the finished work before starting the next change/Feature.
+Commit → PR (con enlaces Azure) → actualizar Boards. Then start the next change/Feature.

@@ -18,7 +18,7 @@ PRD → Azure backlog → `openspec/specs/` → `openspec/changes/<id>/` (propos
 - MVP: catálogo audio + presupuesto/cita. **Sin** checkout, **sin** Imagen, **sin** auth.
 - Formularios presupuesto/cita con Zod.
 - Antes de cerrar: `npm run typecheck` && `npm run test`.
-- **Commit git al cerrar** cada change/Feature/hito de harness; no acumular entregas sin commit. No push salvo petición explícita.
+- **Commit + PR al cerrar** cada change/Feature/US: rama → commit → PR a `Main` con `AB#<id>` → actualizar Azure. No push directo a `Main` salvo petición explícita.
 - UX premium oscura; hero sin cards/overlays.
 
 ## OpenSpec
