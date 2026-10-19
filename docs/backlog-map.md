@@ -6,7 +6,7 @@
 | Feature | Azure | Specs (`openspec/specs/`) | Change |
 | --- | --- | --- | --- |
 | F0 Scaffold y tipado | #13 · US #19 #20 | `project-foundation`, `inventory` | `changes/f0-scaffold-foundation` |
-| F1 Home y shell | #14 · US #21 #22 | `home-brand` | _(pendiente)_ |
+| F1 Home y shell | #14 · US #21 #22 | `home-brand` | `changes/f1-home-brand-shell` |
 | F2 Catálogo y PDP | #15 · US #23 #24 #25 | `catalog`, `product-detail`, `search` | _(pendiente)_ |
 | F3 Presupuesto | #16 · US #26 #27 | `quote` | _(pendiente)_ |
 | F4 Cita y contacto | #17 · US #28 #29 | `appointment`, `contact-legal` | _(parcial: legales en F5)_ |
