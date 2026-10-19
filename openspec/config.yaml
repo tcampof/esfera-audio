@@ -1,0 +1,58 @@
+schema: spec-driven
+
+context: |
+  Language: Spanish
+  All artifacts must be written in Spanish.
+  Keep OpenSpec structural headings and SHALL/MUST keywords in English.
+
+  Proyecto: Esfera Audio — web premium Hi-Fi (práctica Harness/SDD; candidato a propuesta comercial).
+  Stack: React + TypeScript + Vite + Tailwind CSS + shadcn/ui.
+  PRD: docs/PRD.md (v0.3). Decisiones §3.4 cerradas (D1–D6).
+  Backlog: Azure Boards https://dev.azure.com/tcampo/EsferaAudio (Epic #12, Features F0–F5, US #19–#31).
+  Harness: AGENTS.md + .cursor/rules/ + este config.
+
+  MVP (incluir):
+  - Catálogo completo de AUDIO (sin categoría Imagen)
+  - Home de marca + búsqueda
+  - PDP con variantes, specs, stock en tiempo real (contrato; mock en dev)
+  - Selección → solicitud de presupuesto (Zod); sin checkout/pago
+  - Reserva de cita + contacto + legales
+  - i18n: ES default, app i18n-ready (EN roadmap)
+
+  MVP (excluir):
+  - Categoría Imagen (TV/proyectores)
+  - Checkout, Redsys, carrito transaccional
+  - Auth / Mi cuenta / pedidos
+  - Configurador de sistemas, CMS admin, newsletters
+
+  Tipos de catálogo: src/types/hifi.ts (Product, Category, Specification, ProductVariant). Prohibido `any`.
+  Formularios presupuesto/cita: Zod. Antes de cerrar tarea: npm run typecheck && npm run test.
+  UX: oscura/elegante Hi-Fi; hero full-bleed; sin cards en hero.
+
+rules:
+  proposal:
+    - Mantener propuestas bajo ~500 palabras
+    - Declarar siempre fuera de alcance (checkout, Imagen, auth si aplica)
+    - Enlazar IDs de Azure Boards (Feature / User Story) cuando existan
+  specs:
+    - Requisitos observables y escenarios WHEN/THEN testables
+    - No meter detalles de implementación (librerías, nombres de clases) en spec.md
+    - Una capability = un directorio kebab-case bajo specs/
+  design:
+    - Alinear con AGENTS.md y docs/PRD.md
+    - Mencionar contrato de inventario si el cambio toca stock
+  tasks:
+    - Tareas verificables; incluir typecheck/test en el cierre del change
+    - Preferir chunks ≤ 2 h de trabajo agente
+
+operations:
+  apply:
+    guidance:
+      - "Seguir tasks.md en orden; no inventar features fuera del change"
+      - "Tras implementar: typecheck + test; contrastar escenarios de la spec"
+      - "No añadir checkout, Imagen ni auth en el MVP"
+      - "Al cerrar el change: crear commit git de esa entrega (harness); no push salvo petición del usuario"
+  archive:
+    guidance:
+      - "Confirmar que los escenarios ADDED quedaron cubiertos"
+      - "Actualizar docs/backlog-map.md si cambió el mapeo Azure ↔ specs"

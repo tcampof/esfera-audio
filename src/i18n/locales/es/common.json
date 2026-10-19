@@ -1,0 +1,9 @@
+{
+  "appName": "Esfera Audio",
+  "tagline": "Imagen y sonido — foundation F0",
+  "scaffoldTitle": "Cimiento listo",
+  "scaffoldBody": "Scaffold tipado, i18n ES, mocks de audio e inventario mock. Sin Home premium (F1).",
+  "categoriesLabel": "Categorías mock",
+  "productsLabel": "Productos mock",
+  "stockLabel": "Stock (contrato)"
+}

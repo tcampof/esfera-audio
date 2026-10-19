@@ -1,0 +1,5 @@
+schema: spec-driven
+created: 2026-10-19
+skip_specs: true
+# Specs ya viven en openspec/specs/ (project-foundation, inventory, …).
+# Este change IMPLEMENTA F0 contra esas specs; no añade delta.

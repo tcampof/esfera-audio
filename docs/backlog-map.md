@@ -1,0 +1,21 @@
+# Mapa Azure Boards ↔ OpenSpec
+
+**Org/proyecto:** [EsferaAudio](https://dev.azure.com/tcampo/EsferaAudio) (org `tcampo`)  
+**Epic:** #12 — MVP Esfera Audio — Catálogo + Presupuesto/Cita
+
+| Feature | Azure | Specs (`openspec/specs/`) | Change |
+| --- | --- | --- | --- |
+| F0 Scaffold y tipado | #13 · US #19 #20 | `project-foundation`, `inventory` | `changes/f0-scaffold-foundation` |
+| F1 Home y shell | #14 · US #21 #22 | `home-brand` | _(pendiente)_ |
+| F2 Catálogo y PDP | #15 · US #23 #24 #25 | `catalog`, `product-detail`, `search` | _(pendiente)_ |
+| F3 Presupuesto | #16 · US #26 #27 | `quote` | _(pendiente)_ |
+| F4 Cita y contacto | #17 · US #28 #29 | `appointment`, `contact-legal` | _(parcial: legales en F5)_ |
+| F5 i18n, legales, SEO | #18 · US #30 #31 | `i18n`, `contact-legal` | _(pendiente)_ |
+
+## Flujo de trabajo
+
+1. Leer spec(s) de la capability.
+2. Crear/usar change OpenSpec (`/opsx-propose` o carpeta en `changes/`).
+3. Completar `tasks.md` → `/opsx-apply`.
+4. Verificar escenarios + `typecheck`/`test`.
+5. `/opsx-archive` si hubo deltas; actualizar este mapa si cambia el enlace.

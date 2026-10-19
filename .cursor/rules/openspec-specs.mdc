@@ -1,0 +1,14 @@
+---
+description: Convenciones al editar specs y changes OpenSpec
+globs: openspec/**/*.md
+alwaysApply: false
+---
+
+# OpenSpec — convenciones
+
+- Artifacts en **español**; headings estructurales y SHALL/MUST en **inglés**.
+- Spec = comportamiento observable + escenarios WHEN/THEN. Sin detalle de implementación.
+- Una capability = un directorio kebab-case (`openspec/specs/<capability>/spec.md`).
+- Changes: `proposal.md` → `design.md` + deltas (si aplica) → `tasks.md` → apply.
+- Enlazar Azure Boards (Feature/US) en proposal cuando exista.
+- No ampliar alcance MVP (checkout, Imagen, auth) sin actualizar PRD §3.4.

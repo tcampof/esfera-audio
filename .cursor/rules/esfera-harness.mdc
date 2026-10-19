@@ -1,0 +1,28 @@
+---
+description: Harness Esfera Audio — contexto, SDD/OpenSpec y feedforward controls
+alwaysApply: true
+---
+
+# Esfera Audio — Harness
+
+## Pilares
+1. **Herramienta:** Cursor + skills `esfera-*` + `openspec-*` (`docs/skills.md`, `/opsx-*`).
+2. **Contexto:** `AGENTS.md`, `docs/PRD.md`, `openspec/config.yaml`, `openspec/specs/`, Azure Boards EsferaAudio.
+3. **Prompt:** no implementar sin change/spec clara; usar `esfera-harness` al iniciar; Explore → Plan → Execute.
+
+## Cadena SDD
+PRD → Azure backlog → `openspec/specs/` → `openspec/changes/<id>/` (proposal → design → tasks) → apply → archive.
+
+## Feedforward (obligatorio)
+- Prohibido `any`. Tipos de catálogo en `src/types/hifi.ts`.
+- MVP: catálogo audio + presupuesto/cita. **Sin** checkout, **sin** Imagen, **sin** auth.
+- Formularios presupuesto/cita con Zod.
+- Antes de cerrar: `npm run typecheck` && `npm run test`.
+- **Commit git al cerrar** cada change/Feature/hito de harness; no acumular entregas sin commit. No push salvo petición explícita.
+- UX premium oscura; hero sin cards/overlays.
+
+## OpenSpec
+- Specs vivas: `openspec/specs/<capability>/spec.md`
+- Trabajo en curso: `openspec/changes/`
+- Change activo de arranque: `f0-scaffold-foundation`
+- Mapa Azure ↔ specs: `docs/backlog-map.md`
