@@ -1,14 +1,14 @@
 import { useState, type FormEvent, type ReactElement } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { getPrimaryNavCategories } from "@/data/nav";
+import { getIntentions, intentionCatalogPath } from "@/data/intentions";
 import { cn } from "@/lib/utils";
 import { useQuoteCount } from "@/quote/use-quote-count";
 
 export function SiteHeader(): ReactElement {
   const { t } = useTranslation("common");
   const navigate = useNavigate();
-  const categories = getPrimaryNavCategories();
+  const intentions = getIntentions();
   const quoteCount = useQuoteCount();
   const [query, setQuery] = useState("");
 
@@ -45,11 +45,11 @@ export function SiteHeader(): ReactElement {
           aria-label={t("navAria")}
           className="flex items-center gap-4 text-sm text-[hsl(var(--muted-foreground))] md:gap-5"
         >
-          <div className="hidden items-center gap-5 lg:flex">
-            {categories.slice(0, 6).map((category) => (
+          <div className="hidden items-center gap-4 xl:flex">
+            {intentions.map((intention) => (
               <NavLink
-                key={category.id}
-                to={`/catalogo?cat=${category.slug}`}
+                key={intention.id}
+                to={intentionCatalogPath(intention.id)}
                 className={({ isActive }) =>
                   cn(
                     "transition-colors hover:text-[hsl(var(--foreground))]",
@@ -57,7 +57,7 @@ export function SiteHeader(): ReactElement {
                   )
                 }
               >
-                {category.name}
+                {t(intention.labelKey)}
               </NavLink>
             ))}
           </div>
@@ -65,7 +65,7 @@ export function SiteHeader(): ReactElement {
             to="/catalogo"
             className="transition-colors hover:text-[hsl(var(--foreground))]"
           >
-            {t("ctaCatalog")}
+            {t("ctaCatalogFull")}
           </NavLink>
           <NavLink
             to="/presupuesto"

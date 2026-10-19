@@ -1,10 +1,10 @@
 # UX / IA — Esfera Audio (propuesta moderna)
 
-**Estado:** propuesta de producto (aprobar antes de implementar).  
+**Estado:** aprobado (PR #3) · **apply UI** en curso (`feature/ux-ia-apply`).  
 **Azure:** Feature **AB#32** · US **AB#33**  
 **Spec:** `openspec/specs/ux-ia/spec.md`  
 **Change:** `openspec/changes/ux-modern-ia`  
-**Cuándo implementar:** tras merge de este PR, **antes de F4** (cita/contacto), para no consolidar el patrón “listado legacy”.
+**Siguiente:** merge apply → **F4** cita/contacto sobre esta IA.
 
 ---
 
@@ -143,12 +143,12 @@ Varios PDP → Presupuesto (líneas) → formulario Zod → confirmación (sin p
 
 ## 7. Criterios de aceptación (producto)
 
-- [ ] Un visitante entiende en &lt;5 s que puede **pedir presupuesto o cita**, no comprar online.
-- [ ] La nav primaria **no** es el árbol completo de categorías.
-- [ ] Existe camino **intención → producto → presupuesto/cita**.
-- [ ] Catálogo técnico sigue accesible (D2: catálogo completo audio).
-- [ ] Mobile no depende del menú de 14 ítems.
-- [ ] Look actual (oscuro, tipografía) se preserva; cambia la IA.
+- [x] Un visitante entiende en &lt;5 s que puede **pedir presupuesto o cita**, no comprar online.
+- [x] La nav primaria **no** es el árbol completo de categorías.
+- [x] Existe camino **intención → producto → presupuesto/cita**.
+- [x] Catálogo técnico sigue accesible (D2: catálogo completo audio).
+- [x] Mobile no depende del menú de 14 ítems.
+- [x] Look actual (oscuro, tipografía) se preserva; cambia la IA.
 
 ---
 
