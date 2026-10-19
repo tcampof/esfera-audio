@@ -19,7 +19,16 @@ export interface AddQuoteLineInput {
 
 export type AddQuoteLineResult =
   | { ok: true; lines: QuoteLine[] }
-  | { ok: false; reason: "missing_variant" | "out_of_stock" | "unknown_product" };
+  | {
+      ok: false;
+      reason: "missing_variant" | "out_of_stock" | "unknown_product" | "exceeds_stock";
+    };
+
+function notifyChanged(): void {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("esfera-quote-changed"));
+  }
+}
 
 function readLines(): QuoteLine[] {
   if (typeof localStorage === "undefined") {
@@ -52,10 +61,10 @@ function readLines(): QuoteLine[] {
 
 function writeLines(lines: QuoteLine[]): void {
   memoryLines = lines.map((line) => ({ ...line }));
-  if (typeof localStorage === "undefined") {
-    return;
+  if (typeof localStorage !== "undefined") {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(lines));
   }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(lines));
+  notifyChanged();
 }
 
 export function clearQuoteLinesForTests(): void {
@@ -63,6 +72,10 @@ export function clearQuoteLinesForTests(): void {
   if (typeof localStorage !== "undefined") {
     localStorage.removeItem(STORAGE_KEY);
   }
+}
+
+export function clearQuoteLines(): void {
+  writeLines([]);
 }
 
 export function getQuoteLines(): QuoteLine[] {
@@ -93,8 +106,13 @@ export function addQuoteLine(input: AddQuoteLineInput): AddQuoteLineResult {
   const existing = lines.find(
     (line) => line.productId === input.productId && line.variantId === input.variantId,
   );
+  const nextQty = (existing?.quantity ?? 0) + quantity;
+  if (nextQty > variant.stockQuantity) {
+    return { ok: false, reason: "exceeds_stock" };
+  }
+
   if (existing) {
-    existing.quantity += quantity;
+    existing.quantity = nextQty;
   } else {
     lines.push({
       productId: input.productId,
@@ -103,8 +121,50 @@ export function addQuoteLine(input: AddQuoteLineInput): AddQuoteLineResult {
     });
   }
   writeLines(lines);
-  if (typeof window !== "undefined") {
-    window.dispatchEvent(new Event("esfera-quote-changed"));
-  }
   return { ok: true, lines };
+}
+
+export function updateQuoteLineQuantity(
+  productId: string,
+  variantId: string,
+  quantity: number,
+): AddQuoteLineResult {
+  if (quantity <= 0) {
+    removeQuoteLine(productId, variantId);
+    return { ok: true, lines: readLines() };
+  }
+
+  const product = getProductById(productId);
+  if (!product) {
+    return { ok: false, reason: "unknown_product" };
+  }
+  const variant = product.variants.find((item) => item.id === variantId);
+  if (!variant) {
+    return { ok: false, reason: "missing_variant" };
+  }
+  if (variant.stockQuantity <= 0 || variant.stockStatus === "out_of_stock") {
+    return { ok: false, reason: "out_of_stock" };
+  }
+  if (quantity > variant.stockQuantity) {
+    return { ok: false, reason: "exceeds_stock" };
+  }
+
+  const lines = readLines();
+  const existing = lines.find(
+    (line) => line.productId === productId && line.variantId === variantId,
+  );
+  if (!existing) {
+    return { ok: false, reason: "missing_variant" };
+  }
+  existing.quantity = quantity;
+  writeLines(lines);
+  return { ok: true, lines };
+}
+
+export function removeQuoteLine(productId: string, variantId: string): void {
+  writeLines(
+    readLines().filter(
+      (line) => !(line.productId === productId && line.variantId === variantId),
+    ),
+  );
 }

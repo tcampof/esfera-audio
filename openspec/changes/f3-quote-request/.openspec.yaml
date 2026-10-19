@@ -1,0 +1,4 @@
+schema: spec-driven
+created: 2026-10-19
+skip_specs: true
+# Implementa openspec/specs/quote (Azure F3 #16 · US #26 #27)
