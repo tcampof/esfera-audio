@@ -1,13 +1,41 @@
-import { useEffect, useState, type ReactElement } from "react";
+import { useEffect, useMemo, useState, type FormEvent, type ReactElement } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { getProductById } from "@/data/mocks/catalog";
+import { buttonVariants } from "@/components/ui/button";
 import { formatEurFromCents } from "@/lib/money";
-import { getQuoteLines, type QuoteLine } from "@/quote/quote-store";
+import { cn } from "@/lib/utils";
+import {
+  quoteRequestSchema,
+  type ContactPreference,
+  type QuoteRequestInput,
+} from "@/quote/quote-schema";
+import {
+  getQuoteLines,
+  removeQuoteLine,
+  updateQuoteLineQuantity,
+  type QuoteLine,
+} from "@/quote/quote-store";
+import { submitQuoteRequest, type QuoteSubmitPayload } from "@/quote/submit-quote";
+
+const emptyForm: QuoteRequestInput = {
+  name: "",
+  email: "",
+  phone: "",
+  message: "",
+  contactPreference: "email",
+};
 
 export function QuotePage(): ReactElement {
   const { t } = useTranslation("common");
   const [lines, setLines] = useState<QuoteLine[]>([]);
+  const [form, setForm] = useState<QuoteRequestInput>(emptyForm);
+  const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof QuoteRequestInput, string>>>(
+    {},
+  );
+  const [formError, setFormError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [confirmation, setConfirmation] = useState<QuoteSubmitPayload | null>(null);
 
   useEffect(() => {
     const refresh = (): void => {
@@ -21,6 +49,79 @@ export function QuotePage(): ReactElement {
       window.removeEventListener("storage", refresh);
     };
   }, []);
+
+  const totalCents = useMemo(() => {
+    return lines.reduce((sum, line) => {
+      const product = getProductById(line.productId);
+      const variant = product?.variants.find((item) => item.id === line.variantId);
+      if (!variant) {
+        return sum;
+      }
+      return sum + variant.priceCents * line.quantity;
+    }, 0);
+  }, [lines]);
+
+  function errorMessage(code: string | undefined): string | undefined {
+    if (!code) {
+      return undefined;
+    }
+    return t(`quoteError_${code}` as "quoteError_email_invalid");
+  }
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
+    event.preventDefault();
+    setFormError(null);
+    setFieldErrors({});
+
+    const parsed = quoteRequestSchema.safeParse(form);
+    if (!parsed.success) {
+      const next: Partial<Record<keyof QuoteRequestInput, string>> = {};
+      for (const issue of parsed.error.issues) {
+        const key = issue.path[0];
+        if (typeof key === "string") {
+          next[key as keyof QuoteRequestInput] = issue.message;
+        }
+      }
+      setFieldErrors(next);
+      return;
+    }
+
+    setSubmitting(true);
+    const result = await submitQuoteRequest(parsed.data);
+    setSubmitting(false);
+
+    if (!result.ok) {
+      if (result.code === "empty") {
+        setFormError(t("quoteError_empty"));
+      } else {
+        setFormError(t("quoteError_stock"));
+      }
+      setLines(getQuoteLines());
+      return;
+    }
+
+    setConfirmation(result.payload);
+    setForm(emptyForm);
+  }
+
+  if (confirmation) {
+    return (
+      <main className="mx-auto max-w-3xl px-6 py-28">
+        <h1 className="font-[family-name:var(--font-display)] text-4xl">
+          {t("quoteConfirmTitle")}
+        </h1>
+        <p className="mt-3 text-[hsl(var(--muted-foreground))]">
+          {t("quoteConfirmBody", { name: confirmation.name })}
+        </p>
+        <p className="mt-2 text-sm text-[hsl(var(--muted-foreground))]">
+          {t("quoteConfirmNoPayment")}
+        </p>
+        <Link to="/catalogo" className={cn(buttonVariants(), "mt-8 inline-flex")}>
+          {t("ctaCatalog")}
+        </Link>
+      </main>
+    );
+  }
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-28">
@@ -40,25 +141,138 @@ export function QuotePage(): ReactElement {
             return (
               <li
                 key={`${line.productId}-${line.variantId}`}
-                className="flex justify-between gap-4 rounded-lg border border-[hsl(var(--border))] p-4"
+                className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-[hsl(var(--border))] p-4"
               >
                 <div>
                   <p className="font-medium">
                     {product.name} · {variant.name}
                   </p>
                   <p className="text-sm text-[hsl(var(--muted-foreground))]">
-                    × {line.quantity}
+                    {formatEurFromCents(variant.priceCents)} / u.
                   </p>
                 </div>
-                <p>{formatEurFromCents(variant.priceCents * line.quantity)}</p>
+                <div className="flex items-center gap-3">
+                  <label className="text-sm text-[hsl(var(--muted-foreground))]">
+                    {t("quoteQty")}
+                    <input
+                      type="number"
+                      min={1}
+                      max={variant.stockQuantity}
+                      value={line.quantity}
+                      className="ml-2 w-16 rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-2 py-1"
+                      onChange={(event) => {
+                        const value = Number(event.target.value);
+                        updateQuoteLineQuantity(line.productId, line.variantId, value);
+                      }}
+                    />
+                  </label>
+                  <p className="min-w-20 text-right">
+                    {formatEurFromCents(variant.priceCents * line.quantity)}
+                  </p>
+                  <button
+                    type="button"
+                    className="text-sm text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
+                    onClick={() => removeQuoteLine(line.productId, line.variantId)}
+                  >
+                    {t("quoteRemove")}
+                  </button>
+                </div>
               </li>
             );
           })}
         </ul>
       )}
 
-      <p className="mt-8 text-sm text-[hsl(var(--muted-foreground))]">{t("quoteFormLater")}</p>
-      <Link to="/catalogo" className="mt-4 inline-block text-[hsl(var(--primary))]">
+      {lines.length > 0 ? (
+        <p className="mt-4 text-right text-lg">
+          {t("quoteTotal")}: {formatEurFromCents(totalCents)}
+        </p>
+      ) : null}
+
+      <form onSubmit={onSubmit} className="mt-12 space-y-4 border-t border-[hsl(var(--border))] pt-10">
+        <h2 className="font-[family-name:var(--font-display)] text-2xl">{t("quoteFormTitle")}</h2>
+        <p className="text-sm text-[hsl(var(--muted-foreground))]">{t("quoteFormHint")}</p>
+
+        <label className="block space-y-1 text-sm">
+          <span>{t("quoteFieldName")}</span>
+          <input
+            className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2"
+            value={form.name}
+            onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))}
+          />
+          {fieldErrors.name ? (
+            <span className="text-[hsl(var(--primary))]">{errorMessage(fieldErrors.name)}</span>
+          ) : null}
+        </label>
+
+        <label className="block space-y-1 text-sm">
+          <span>{t("quoteFieldEmail")}</span>
+          <input
+            type="email"
+            className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2"
+            value={form.email}
+            onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))}
+          />
+          {fieldErrors.email ? (
+            <span className="text-[hsl(var(--primary))]">{errorMessage(fieldErrors.email)}</span>
+          ) : null}
+        </label>
+
+        <label className="block space-y-1 text-sm">
+          <span>{t("quoteFieldPhone")}</span>
+          <input
+            className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2"
+            value={form.phone}
+            onChange={(event) => setForm((prev) => ({ ...prev, phone: event.target.value }))}
+          />
+          {fieldErrors.phone ? (
+            <span className="text-[hsl(var(--primary))]">{errorMessage(fieldErrors.phone)}</span>
+          ) : null}
+        </label>
+
+        <label className="block space-y-1 text-sm">
+          <span>{t("quoteFieldPreference")}</span>
+          <select
+            className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2"
+            value={form.contactPreference}
+            onChange={(event) =>
+              setForm((prev) => ({
+                ...prev,
+                contactPreference: event.target.value as ContactPreference,
+              }))
+            }
+          >
+            <option value="email">{t("quotePrefEmail")}</option>
+            <option value="phone">{t("quotePrefPhone")}</option>
+            <option value="whatsapp">{t("quotePrefWhatsapp")}</option>
+          </select>
+        </label>
+
+        <label className="block space-y-1 text-sm">
+          <span>{t("quoteFieldMessage")}</span>
+          <textarea
+            rows={4}
+            className="w-full rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] px-3 py-2"
+            value={form.message}
+            onChange={(event) => setForm((prev) => ({ ...prev, message: event.target.value }))}
+          />
+          {fieldErrors.message ? (
+            <span className="text-[hsl(var(--primary))]">{errorMessage(fieldErrors.message)}</span>
+          ) : null}
+        </label>
+
+        {formError ? <p className="text-sm text-[hsl(var(--primary))]">{formError}</p> : null}
+
+        <button
+          type="submit"
+          disabled={submitting || lines.length === 0}
+          className={cn(buttonVariants(), "disabled:opacity-50")}
+        >
+          {submitting ? t("quoteSubmitting") : t("quoteSubmit")}
+        </button>
+      </form>
+
+      <Link to="/catalogo" className="mt-8 inline-block text-sm text-[hsl(var(--primary))]">
         {t("ctaCatalog")}
       </Link>
     </main>

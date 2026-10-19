@@ -33,4 +33,16 @@ describe("addQuoteLine", () => {
     expect(result.ok).toBe(true);
     expect(getQuoteItemCount()).toBe(1);
   });
+
+  it("rejects quantities above available stock", () => {
+    const result = addQuoteLine({
+      productId: "prod-vulkkano-a5",
+      variantId: "var-vulkkano-negro",
+      quantity: 99,
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.reason).toBe("exceeds_stock");
+    }
+  });
 });
