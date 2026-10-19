@@ -7,7 +7,7 @@
 | --- | --- | --- | --- |
 | F0 Scaffold y tipado | #13 · US #19 #20 | `project-foundation`, `inventory` | `changes/f0-scaffold-foundation` |
 | F1 Home y shell | #14 · US #21 #22 | `home-brand` | `changes/f1-home-brand-shell` |
-| F2 Catálogo y PDP | #15 · US #23 #24 #25 | `catalog`, `product-detail`, `search` | _(pendiente)_ |
+| F2 Catálogo y PDP | #15 · US #23 #24 #25 | `catalog`, `product-detail`, `search` | `changes/f2-catalog-pdp-search` |
 | F3 Presupuesto | #16 · US #26 #27 | `quote` | _(pendiente)_ |
 | F4 Cita y contacto | #17 · US #28 #29 | `appointment`, `contact-legal` | _(parcial: legales en F5)_ |
 | F5 i18n, legales, SEO | #18 · US #30 #31 | `i18n`, `contact-legal` | _(pendiente)_ |

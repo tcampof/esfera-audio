@@ -1,0 +1,4 @@
+schema: spec-driven
+created: 2026-10-19
+skip_specs: true
+# Implementa catalog + product-detail + search (Azure F2 #15 · US #23 #24 #25)
