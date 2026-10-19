@@ -348,6 +348,8 @@ Precios en **céntimos** para evitar float. UI en EUR; locales `es` (default) + 
 
 ## 7. IA / Design system (constraints)
 
+### 7.1 Visual (look)
+
 Alineado con reglas de frontend del proyecto:
 
 - Primera viewport = una composición de marca, no dashboard.  
@@ -355,6 +357,16 @@ Alineado con reglas de frontend del proyecto:
 - Evitar looks genéricos IA (púrpura, cream+terracotta, broadsheet).  
 - Oscuro elegante Hi-Fi: negros, grafito, acento metálico/ámbar contenido.  
 - 2–3 motions intencionados (entrada hero, hover producto, transición página).
+
+### 7.2 Arquitectura de información (experience)
+
+Documento vivo: **`docs/ux-ia.md`**. Spec: `openspec/specs/ux-ia`. Azure: **AB#32** / **AB#33**.
+
+- Navegación primaria por **intenciones** (estéreo, cine, vinilo, multiroom, proyectos), no por el árbol completo de categorías.  
+- Catálogo técnico completo accesible como capa secundaria (sin Imagen en MVP).  
+- PDP: decisión (variante, stock, presupuesto, cita) antes que bloque denso de specs.  
+- Presupuesto = selección para asesorar (stepper), no carrito de checkout.  
+- **Implementar la IA moderna antes de F4**; no consolidar el patrón listado legacy.
 
 ---
 
@@ -368,12 +380,13 @@ Orden sugerido de PRs / milestones:
 | 1 | Layout shell (nav, footer, theme); Home | Visual brand test; CTAs catálogo + cita |
 | 2 | Catálogo audio + filtros + PDP + contrato inventario | Stock por variante; sin Imagen |
 | 3 | Selección + solicitud de presupuesto | Form Zod; revalidación de stock al enviar |
-| 4 | Reserva de cita + Contacto | Forms Zod; enlace desde PDP |
+| UX | Definición + apply IA moderna (`docs/ux-ia.md`) | Spec `ux-ia`; nav por intenciones; **antes de F4** |
+| 4 | Reserva de cita + Contacto | Forms Zod; enlace desde PDP; alineado a IA moderna |
 | 5 | i18n EN + legales + SEO | Switcher idioma; Lighthouse smoke |
 | 6 | Inventario real + import catálogo | Sustituir mocks por API/feed vivo |
 | 7+ | Checkout (Redsys + transferencia) + Imagen + Auth | Post-MVP (D3/D5) |
 
-Cada fase debe respetar `AGENTS.md` y este PRD. Si hay conflicto, **ganan las decisiones cerradas de §3.4**.
+Cada fase debe respetar `AGENTS.md` y este PRD. Si hay conflicto, **ganan las decisiones cerradas de §3.4**. Si hay conflicto visual vs journeys, **gana `docs/ux-ia.md` + spec `ux-ia`** para IA; §7.1 para look.
 
 ---
 
@@ -394,5 +407,5 @@ Cuenta de prueba usada solo para auditoría de área privada (no almacenar crede
 ## 10. Próximos pasos sugeridos
 
 1. ~~Validar D1–D6~~ — **todas cerradas**.  
-2. Definir proveedor/API de inventario en tiempo real (Fase 6; contrato desde Fase 0–2).  
-3. Arrancar **Fase 0** del agente con este PRD + `AGENTS.md`.
+2. Mergear definición UX IA (**AB#32** / **AB#33**) e **implementar** antes de F4.  
+3. Definir proveedor/API de inventario en tiempo real (Fase 6; contrato desde Fase 0–2).
