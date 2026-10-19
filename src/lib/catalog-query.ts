@@ -1,12 +1,44 @@
+import { getIntentionById } from "@/data/intentions";
 import { mockCategories, mockProducts } from "@/data/mocks/catalog";
 import type { Product, StockStatus } from "@/types/hifi";
 
 export interface CatalogFilters {
   categorySlug?: string;
+  /** Intention id from docs/ux-ia (stereo, vinyl, …). */
+  intentionId?: string;
   brand?: string;
   minPriceCents?: number;
   maxPriceCents?: number;
   inStockOnly?: boolean;
+}
+
+function categoryIdsForSlug(slug: string): Set<string> {
+  const category = mockCategories.find((item) => item.slug === slug);
+  const allowedIds = new Set<string>();
+  if (!category) {
+    return allowedIds;
+  }
+  allowedIds.add(category.id);
+  for (const child of mockCategories) {
+    if (child.parentId === category.id) {
+      allowedIds.add(child.id);
+    }
+  }
+  return allowedIds;
+}
+
+function categoryIdsForIntention(intentionId: string): Set<string> {
+  const intention = getIntentionById(intentionId);
+  const allowedIds = new Set<string>();
+  if (!intention) {
+    return allowedIds;
+  }
+  for (const slug of intention.categorySlugs) {
+    for (const id of categoryIdsForSlug(slug)) {
+      allowedIds.add(id);
+    }
+  }
+  return allowedIds;
 }
 
 export function getUniqueBrands(): string[] {
@@ -17,18 +49,14 @@ export function getUniqueBrands(): string[] {
 
 export function filterProducts(filters: CatalogFilters): Product[] {
   return mockProducts.filter((product) => {
-    if (filters.categorySlug) {
-      const category = mockCategories.find((item) => item.slug === filters.categorySlug);
-      if (!category) {
+    if (filters.intentionId) {
+      const allowedIds = categoryIdsForIntention(filters.intentionId);
+      if (allowedIds.size === 0 || !product.categoryIds.some((id) => allowedIds.has(id))) {
         return false;
       }
-      const allowedIds = new Set<string>([category.id]);
-      for (const child of mockCategories) {
-        if (child.parentId === category.id) {
-          allowedIds.add(child.id);
-        }
-      }
-      if (!product.categoryIds.some((id) => allowedIds.has(id))) {
+    } else if (filters.categorySlug) {
+      const allowedIds = categoryIdsForSlug(filters.categorySlug);
+      if (allowedIds.size === 0 || !product.categoryIds.some((id) => allowedIds.has(id))) {
         return false;
       }
     }

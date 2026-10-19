@@ -15,6 +15,11 @@ describe("filterProducts", () => {
     );
     expect(result.some((product) => product.slug === "rega-io")).toBe(false);
   });
+
+  it("filters by intention (multiroom includes streaming speakers)", () => {
+    const result = filterProducts({ intentionId: "multiroom" });
+    expect(result.some((product) => product.slug === "bluesound-pulse-flex-2i")).toBe(true);
+  });
 });
 
 describe("searchCatalog", () => {
