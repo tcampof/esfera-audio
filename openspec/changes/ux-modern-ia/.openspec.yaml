@@ -1,0 +1,5 @@
+schema: spec-driven
+created: 2026-10-19
+skip_specs: true
+# Spec viva ya en openspec/specs/ux-ia. Este change documenta la decisión;
+# la implementación UI es un apply posterior (antes de F4).

@@ -15,6 +15,15 @@ description: >-
 - Full-bleed hero; **no** cards in hero; **no** floating badges/overlays on hero media.
 - CTAs: catalog + appointment (not checkout).
 
+## Information architecture (required)
+
+- **Primary nav = intentions** (stereo, cinema, vinyl, multiroom, projects)—not the full category tree.
+- Full technical catalog remains reachable as a **secondary** path (“Ver todo el catálogo”).
+- Home below hero: small set of intention destinations, not a product dashboard.
+- PDP: decision layer first (variant, stock, quote, demo); dense specs after.
+- Quote: advisory selection / budget request with clear steps—not a checkout cart.
+- Do **not** start F4 until IA modern apply is done or explicitly planned against `docs/ux-ia.md`.
+
 ## Look
 
 - Dark elegant Hi-Fi: graphite/black, restrained metal/amber accent.
@@ -35,4 +44,4 @@ description: >-
 
 ## References
 
-- PRD §7 · user frontend design rules · `openspec/specs/home-brand/spec.md`
+- `docs/ux-ia.md` · PRD §7 · `openspec/specs/ux-ia/spec.md` · `openspec/specs/home-brand/spec.md`

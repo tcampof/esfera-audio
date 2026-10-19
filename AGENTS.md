@@ -8,6 +8,7 @@
 - Inventario: **tiempo real** por producto/variante (contrato tipado; mock solo en desarrollo).
 - i18n: **ES default**, app i18n-ready (EN en roadmap). Checkout futuro: **Redsys + transferencia**.
 - **PRD:** `/docs/PRD.md` (auditoría + decisiones §3.4 + fases).
+- **UX / IA:** `/docs/ux-ia.md` + spec `openspec/specs/ux-ia` (intenciones; aplicar antes de F4).
 - **OpenSpec:** `/openspec/` — specs vivas + changes. Config: `openspec/config.yaml`.
 - **Mapa backlog:** `/docs/backlog-map.md` (Azure ↔ specs ↔ changes).
 - **Propósito dual:** práctica del máster (Harness Engineering / SDD). Si es sólido → propuesta comercial a Esfera Audio.
